@@ -4,7 +4,7 @@
 
 Please do not open a public issue for security-sensitive problems.
 
-Use [GitHub private vulnerability reporting](https://github.com/PsCustomObject/IT-ToolBox/security/advisories/new).
+Use [GitHub private vulnerability reporting](https://github.com/SingularVector/IT-ToolBox/security/advisories/new).
 Sign in to GitHub to submit a private report. If private reporting is unavailable,
 open a general issue asking the maintainer to enable it, without including
 vulnerability details, secrets or reproduction steps.

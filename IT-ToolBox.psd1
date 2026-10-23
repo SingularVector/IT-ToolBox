@@ -45,8 +45,8 @@
     PrivateData = @{
         PSData = @{
             Tags = @('Infrastructure', 'Automation', 'Logging')
-            LicenseUri = 'https://github.com/PsCustomObject/IT-ToolBox/blob/master/LICENSE'
-            ProjectUri = 'https://github.com/PsCustomObject/IT-ToolBox'
+            LicenseUri = 'https://github.com/SingularVector/IT-ToolBox/blob/master/LICENSE'
+            ProjectUri = 'https://github.com/SingularVector/IT-ToolBox'
         }
     }
 }

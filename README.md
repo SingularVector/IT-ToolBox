@@ -3,12 +3,12 @@
 [![PowerShell 7.4+](https://img.shields.io/badge/PowerShell-7.4%2B-5391FE?logo=powershell)](https://github.com/PowerShell/PowerShell)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)
 [![Version: 3.0.0](https://img.shields.io/badge/version-3.0.0-blue.svg)](./CHANGELOG.md)
-[![Testing wanted](https://img.shields.io/badge/testing-wanted-yellow.svg)](https://github.com/PsCustomObject/IT-ToolBox/issues/new/choose)
+[![Testing wanted](https://img.shields.io/badge/testing-wanted-yellow.svg)](https://github.com/SingularVector/IT-ToolBox/issues/new/choose)
 
 > **Testing wanted — help validate IT-ToolBox 3.0.0 in real environments.**
 > Feedback is especially useful for Windows AD report chains, remote CIM uptime,
 > API authentication and platform clipboard behavior.
-> [Report a bug](https://github.com/PsCustomObject/IT-ToolBox/issues/new/choose)
+> [Report a bug](https://github.com/SingularVector/IT-ToolBox/issues/new/choose)
 > with the command, expected/actual result, OS, PowerShell version and commit or
 > module version. Redact credentials and private data; report vulnerabilities
 > through [the private security reporting route](./SECURITY.md).
@@ -115,7 +115,7 @@ working platform clipboard backend.
 Clone the repository with Git; no ZIP or build step is required:
 
 ```bash
-git clone https://github.com/PsCustomObject/IT-ToolBox.git
+git clone https://github.com/SingularVector/IT-ToolBox.git
 cd IT-ToolBox
 pwsh
 ```
@@ -568,7 +568,7 @@ service-specific migration directions and requirements for future wrappers.
 
 ## Feedback and contributions
 
-Report reproducible bugs through [GitHub Issues](https://github.com/PsCustomObject/IT-ToolBox/issues).
+Report reproducible bugs through [GitHub Issues](https://github.com/SingularVector/IT-ToolBox/issues).
 Include the command, expected and actual behavior, operating system, PowerShell
 version and repository commit. Remove credentials and private data from examples.
 See [CONTRIBUTING.md](./CONTRIBUTING.md) for the branch and test workflow.

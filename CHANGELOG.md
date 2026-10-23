@@ -184,7 +184,7 @@ or PowerShell Gallery publication.
 
 ## Version 2.2.2.0 - 17.05.2020
 
-- **Updated** cmdlet *New-LogEntry* to use latest [function version](https://github.com/PsCustomObject/New-LogEntry)
+- **Updated** cmdlet *New-LogEntry* to use latest [function version](https://github.com/SingularVector/New-LogEntry)
 - **Updated** cmdlet *New-StringConversion* to use latest function version including performance and reliability enhancements
 - **Updated** version of *WinSCPnet.dll* assembly file
 
@@ -194,7 +194,7 @@ or PowerShell Gallery publication.
 
 ## Version 2.2.0.0 - 05.12.2019
 
-- **New** cmdlet *New-ExchangeSession* to create a remote PowerShell session to an on-premise Exchange server [2](https://github.com/PsCustomObject/IT-ToolBox/issues/2)
+- **New** cmdlet *New-ExchangeSession* to create a remote PowerShell session to an on-premise Exchange server [2](https://github.com/SingularVector/IT-ToolBox/issues/2)
 - **New** cmdlet *Close-ExchangeSession* to close a remote PowerShell session to an on-premise or online Exchange server
 
 ## Version 2.1.0.0 - 02.11.2019
