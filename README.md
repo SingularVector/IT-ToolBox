@@ -13,57 +13,10 @@
 > module version. Redact credentials and private data; report vulnerabilities
 > through [the private security reporting route](./SECURITY.md).
 
-PowerShell utilities for enterprise automation, secure logging, identity validation,
-and cross-platform operational tooling.
-
-IT-ToolBox is a practical PowerShell module for real-world admin and infrastructure
-workflows. It is designed for teams that want explicit validation, secure defaults,
-and portable behavior without hidden magic or fragile assumptions.
-
-## Why it matters
-
-Operational work is full of small but expensive failures: invalid input, inconsistent
-logging, brittle naming rules, and fragile automation built on assumptions. IT-ToolBox
-was created to reduce those failure points with reusable PowerShell utilities that
-prioritize safety, clarity, and portability across modern enterprise environments.
-
-## Why this project exists
-
-This project packages automation patterns that are often built ad hoc in enterprise
-workplaces: filesystem validation, identity and DNS checks, log management, secure
-string handling, and operational diagnostics. The result is a reusable toolkit that
-prioritizes clarity, safety, and portability instead of one-off script logic.
-
-## Portfolio highlights
-
-- Cross-platform PowerShell 7.4+ design
-- Secure logging and string-handling helpers with explicit safety boundaries
-- Validation-first utilities for email, URLs, DNS, DN and UPN checks
-- Operational helpers for timing, script context and filesystem hygiene
-- Modernization work that preserves compatibility where it matters
-- Built for real deployment scenarios, not just demo scripts
-
-## Use cases
-
-IT-ToolBox is designed for the kinds of tasks that recur in real administrative and
-operations work: validating names and input, writing safe logs, enforcing naming rules,
-tracing script context, and handling sensitive values without obscuring the logic behind
-complex utility wrappers.
-
-Typical scenarios include:
-
-- validating user and endpoint input in scripts before commands run
-- adding consistent, redactable logging to automation workflows
-- generating secure random values and supporting password workflows
-- checking script paths and operational timing in automation tooling
-- normalizing filesystem names and reducing operational errors before actions execute
-
-## Project philosophy
-
-The module emphasizes four things: explicit validation, safe defaults, cross-platform
-compatibility, and operational clarity. The goal is not to hide behavior behind clever
-abstractions, but to provide reliable building blocks that are easy to reason about,
-review, and adapt in production automation.
+IT-ToolBox collects PowerShell utilities used in systems engineering and infrastructure
+automation: logging, input validation, timing, string handling, password generation
+and API requests. Most commands run on Windows, Linux and macOS; the AD, registry
+and remote CIM commands have the platform requirements listed below.
 
 ## At a glance
 
@@ -71,8 +24,9 @@ review, and adapt in production automation.
 | --- | --- |
 | Logging and operations | `New-LogEntry`, `New-Timer`, `Get-ElapsedTime`, `Stop-Timer` |
 | Validation | `Test-IsEmail`, `Test-IsUrl`, `Test-IsValidDn`, `Test-IsValidUpn` |
-| Identity and AD helpers | `Get-ReportChain`, `Convert-LogonTimestamp`, `Test-RegistryValue` |
-| Security and data handling | `New-StringEncryption`, `New-StringDecryption`, `New-PhoneticPassword`, `Get-StringHashCode` |
+| Identity and AD helpers | `Get-ReportChain`, `Convert-LogonTimestamp`, `Test-IsValidUpn` |
+| String handling and passwords | `New-StringEncryption`, `New-StringDecryption`, `New-PhoneticPassword`, `Get-StringHashCode` |
+| OS and filesystem | `Get-OsUpTime`, `Remove-SpecialCharacters`, `Test-RegistryValue` |
 
 ## Documentation map
 
@@ -82,24 +36,21 @@ review, and adapt in production automation.
 - [Changelog](./CHANGELOG.md)
 - [Security policy](./SECURITY.md)
 
-## Project status and roadmap
+## Release status
 
-The module now targets the **3.0.0 release**. The supported API is covered by
-cross-platform regression tests. Community testing is welcome, particularly for
-the live integrations described below. Review the v2 migration notes before upgrading.
+**IT-ToolBox 3.0.0** contains the 29-command API documented below, including the
+standalone timer alignment and updated module metadata. The manifest, loader,
+command inventory and installable archive use the same supported function set.
+See the [3.0.0 release notes](./CHANGELOG.md) for the changes and migration details.
 
-Current roadmap focus:
-
-- preserve the modern PowerShell 7.4+ compatibility baseline
-- keep validation behavior explicit and predictable
-- improve operational safety and logging semantics
-- maintain a clean migration path from legacy patterns
-- document integration boundaries and supported dependencies clearly
+Release builds should use the reviewed 3.0.0 commit or tag rather than a moving
+master checkout. Build and installation instructions are in [Packaging](./docs/Packaging.md).
 
 ## Status and requirements
 
-This is **IT-ToolBox 3.0.0**. The modernization review is
-complete; live AD, remote CIM and service authentication remain unverified.
+The module has **29 exported functions**, matching the manifest and loader.
+Automated tests cover the supported API; live AD, remote CIM and service
+authentication remain unverified.
 Requires PowerShell 7.4 or later (Core edition). Windows
 PowerShell 5.1 is not supported.
 
@@ -151,26 +102,44 @@ For development, see [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ## Command coverage
 
-### Logging, timing and script context
+The following inventory lists every exported function. Source files in Public are
+loaded by IT-ToolBox.psm1; IT-ToolBox.psd1 defines the supported exports. Internal
+helpers in Private are not public commands. Use `Get-Help <command> -Full` for
+parameter help and the sections below for compatibility details.
 
-`New-LogEntry`, `New-Timer`, `Get-TimerStatus`, `Stop-Timer`, `Get-ElapsedTime`,
-`Get-ScriptDirectory`, `Get-ScriptName`
-
-### Validation and identity
-
-`Test-FileName`, `Test-IsValidPath`, `Test-IsIP`, `Test-IsDate`, `Test-IsEmail`,
-`Test-IsUrl`, `Test-IsValidDn`, `Test-IsValidUpn`, `Get-ReportChain`
-
-### Security, conversion and data handling
-
-`New-StringEncryption`, `New-StringDecryption`, `New-RandomString`,
-`New-RandomPassword`, `New-PhoneticPassword`, `New-ApiRequest`,
-`New-StringConversion`, `Get-StringCheckSum`, `Get-StringHashCode`
-
-### OS, filesystem and operational helpers
-
-`Convert-LogonTimestamp`, `Get-OsUpTime`, `Remove-SpecialCharacters`,
-`Test-RegistryValue`
+<!-- command-inventory:start -->
+| Command | Behavior and boundary |
+| --- | --- |
+| `New-LogEntry` | Write logs or manage the in-memory buffer; success output is opt-in. |
+| `New-Timer` | Start a System.Diagnostics.Stopwatch. |
+| `Get-TimerStatus` | Return whether a stopwatch is running. |
+| `Stop-Timer` | Stop without resetting elapsed time; return a Boolean. |
+| `Get-ElapsedTime` | Return a TimeSpan, an elapsed component or a numeric total. |
+| `Get-ScriptDirectory` | Resolve the calling script directory or an explicit script path. |
+| `Get-ScriptName` | Resolve the calling script filename or an explicit script path. |
+| `Test-FileName` | Check lexical filename rules for the host or Windows compatibility. |
+| `Test-IsValidPath` | Check path syntax without checking existence or permissions. |
+| `Test-IsIP` | Check strict IP address syntax. |
+| `Test-IsDate` | Check dates with current-culture or explicit format/culture rules. |
+| `Test-IsEmail` | Check the documented bare mailbox syntax subset. |
+| `Test-IsUrl` | Check supported absolute URL syntax; does not fetch the URL. |
+| `Test-IsValidDn` | Check the documented practical DN syntax subset. |
+| `Test-IsValidUpn` | Check username and DNS/IDN suffix syntax; no directory lookup. |
+| `Get-ReportChain` | Query transitive reports in AD; requires Get-ADUser and AD access. |
+| `New-StringEncryption` | Encrypt strings using the authenticated ITTB1 format and a passphrase. |
+| `New-StringDecryption` | Decrypt and authenticate ITTB1 ciphertext with a passphrase. |
+| `New-RandomString` | Generate a string using the original alphabet and cryptographic randomness. |
+| `New-RandomPassword` | Generate a password from the original alphabet; no category-count guarantee. |
+| `New-PhoneticPassword` | Generate passwords with explicit category counts and optional spelling/clipboard output. |
+| `New-ApiRequest` | Send HTTP(S) requests with explicit authentication and redirect boundaries. |
+| `New-StringConversion` | Apply the original character map and configurable space policy. |
+| `Get-StringCheckSum` | Return a formatted digest; MD5 remains the compatibility default. |
+| `Get-StringHashCode` | Return SHA-256 text, with an optional legacy representation. |
+| `Convert-LogonTimestamp` | Convert a supplied FILETIME; zero produces no date. |
+| `Get-OsUpTime` | Read local uptime or query Windows uptime through CIM. |
+| `Remove-SpecialCharacters` | Preview or rename filesystem items using the original punctuation policy. |
+| `Test-RegistryValue` | Check a literal registry value name on Windows. |
+<!-- command-inventory:end -->
 
 ```powershell
 Import-Module ./IT-ToolBox.psd1
@@ -207,6 +176,18 @@ directory for interactive calls. Specify a path to select a stable log filename.
 `-RedactionText` is literal text, including dollar signs. Specify only one buffered
 severity switch, or use `-BufferOnly -Level WARNING` / `ERROR`.
 Redaction is opt-in and does not guarantee detection of every secret.
+
+## Stopwatch helpers
+
+`New-Timer` starts a stopwatch. `Get-TimerStatus` returns its running state, and
+`Stop-Timer` stops it without resetting elapsed time. Stopping an already stopped
+stopwatch succeeds. Both functions reject null timer arguments during binding.
+`Stop-Timer` returns true on success, or a warning and false if Stop() throws;
+`-Verbose` includes the caught exception message.
+
+`Get-ElapsedTime -ElapsedTime $timer` returns a TimeSpan. Component switches such as
+`-Hours` return the component within that TimeSpan; `-TotalHours` returns the full
+elapsed duration expressed in hours. These switches are mutually exclusive.
 
 ## Migration from v2
 

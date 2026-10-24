@@ -1,15 +1,21 @@
 # IT-ToolBox - Change History
 
-## 3.0.0 - 2026-10-14
+## 3.0.0 - 2026-10-24
 
-- Remove beta prerelease metadata; retain the 29-command API and PowerShell 7.4 baseline.
-- Add a prominent community testing invitation with actionable bug-report guidance.
-- Align README, packaging documentation and security support status with 3.0.0.
-- Update archive regression expectations for the stable version.
+- Deliver the stable 29-command API on PowerShell 7.4+ (Core), with no mandatory external module dependencies at import.
+- Retain the module GUID and remove beta prerelease metadata.
+- Align Stop-Timer and Get-TimerStatus with the standalone functions: reject null timer arguments during binding, support common parameters and preserve Boolean results for valid calls.
+- Simplify Stop-Timer exception handling, remove the unrelated AzureAD diagnostic and preserve elapsed time when stopping.
+- Add module-level timer lifecycle, repeated-stop, elapsed-time preservation and caller/module preference regression tests.
+- Update manifest attribution to SingularVector while retaining Daniele Catanesi's authorship; describe the module's actual scope.
+- Replace repetitive README introductions with a complete 29-command inventory, platform requirements and timer behavior.
+- Check that public functions, imported exports, manifest exports and documented commands remain aligned.
+- Retain installable archive validation and regression tests on Windows, Linux and macOS.
 
-Live AD, remote CIM and service authentication remain unverified against real
-endpoints. This entry records release preparation; a GitHub release or Gallery
-publication is a separate action.
+Migration from v2 includes removed service wrappers, updated string encryption and
+changed validation/output contracts; see README.md before upgrading. Live AD,
+remote CIM and service authentication were not integration-tested. These are
+validation boundaries for this release, not additional bundled features.
 
 ## 3.0.0-beta1 - 2026-10-05
 

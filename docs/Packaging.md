@@ -1,6 +1,10 @@
 # Build and install the module
 
-Run from the repository root using PowerShell 7.4 or later:
+Build from the reviewed 3.0.0 release commit or tag using PowerShell 7.4 or later.
+The manifest version is 3.0.0, with no prerelease suffix. Preserve that source
+revision alongside the archive when distributing it.
+
+Run from the repository root:
 
 ```powershell
 Invoke-Pester ./Tests
