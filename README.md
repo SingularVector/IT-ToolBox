@@ -2,10 +2,10 @@
 
 [![PowerShell 7.4+](https://img.shields.io/badge/PowerShell-7.4%2B-5391FE?logo=powershell)](https://github.com/PowerShell/PowerShell)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)
-[![Version: 3.0.1](https://img.shields.io/badge/version-3.0.1-blue.svg)](./CHANGELOG.md)
+[![Version: 3.1.0](https://img.shields.io/badge/version-3.1.0-blue.svg)](./CHANGELOG.md)
 [![Testing wanted](https://img.shields.io/badge/testing-wanted-yellow.svg)](https://github.com/SingularVector/IT-ToolBox/issues/new/choose)
 
-> **Testing wanted — help validate IT-ToolBox 3.0.1 in real environments.**
+> **Testing wanted — help validate IT-ToolBox 3.1.0 in real environments.**
 > Feedback is especially useful for Windows AD report chains, remote CIM uptime,
 > API authentication and platform clipboard behavior.
 > [Report a bug](https://github.com/SingularVector/IT-ToolBox/issues/new/choose)
@@ -38,17 +38,17 @@ and remote CIM commands have the platform requirements listed below.
 
 ## Release status
 
-**IT-ToolBox 3.0.1** contains the 29-command API documented below, including the
-standalone timer alignment and updated module metadata. The manifest, loader,
+**IT-ToolBox 3.1.0** contains the 30-command API documented below, including GUID
+syntax validation and the logger fixes from 3.0.1. The manifest, loader,
 command inventory and installable archive use the same supported function set.
-See the [3.0.1 release notes](./CHANGELOG.md) for the changes and migration details.
+See the [3.1.0 release notes](./CHANGELOG.md) for the changes and migration details.
 
-Release builds should use the reviewed 3.0.1 commit or tag rather than a moving
+Release builds should use the reviewed 3.1.0 commit or tag rather than a moving
 master checkout. Build and installation instructions are in [Packaging](./docs/Packaging.md).
 
 ## Status and requirements
 
-The module has **29 exported functions**, matching the manifest and loader.
+The module has **30 exported functions**, matching the manifest and loader.
 Automated tests cover the supported API; live AD, remote CIM and service
 authentication remain unverified.
 Requires PowerShell 7.4 or later (Core edition). Windows
@@ -120,6 +120,7 @@ parameter help and the sections below for compatibility details.
 | `Test-FileName` | Check lexical filename rules for the host or Windows compatibility. |
 | `Test-IsValidPath` | Check path syntax without checking existence or permissions. |
 | `Test-IsIP` | Check strict IP address syntax. |
+| `Test-IsGuid` | Validate N/D/B/P GUID text without looking up an object. |
 | `Test-IsDate` | Check dates with current-culture or explicit format/culture rules. |
 | `Test-IsEmail` | Check the documented bare mailbox syntax subset. |
 | `Test-IsUrl` | Check supported absolute URL syntax; does not fetch the URL. |
@@ -214,7 +215,7 @@ elapsed duration expressed in hours. These switches are mutually exclusive.
 - All commands formerly retained in `Staging/v3/` now have supported implementations.
   Its README records the migration. Exchange/AzureAD session wrappers and the global
   certificate-validation bypass have been removed; their source remains in Git history.
-- Only the twenty-nine listed commands are exported. Private helpers, variables and aliases
+- Only the thirty listed commands are exported. Private helpers, variables and aliases
   are not exported. Do not treat v3 as a drop-in replacement for every v2 script:
   removed commands and documented parameter, output and encryption changes require
   migration. No restoration of removed service wrappers is promised.
@@ -246,6 +247,16 @@ The integrated logger includes the maintenance fixes described in CHANGELOG.md.
 See [CHANGELOG.md](./CHANGELOG.md) for history. Released under the [MIT License](./LICENSE).
 
 ## Validation semantics
+
+`Test-IsGuid` accepts complete N (32 hexadecimal digits), D (dashed), B (braced)
+and P (parenthesized) GUID strings. It rejects surrounding whitespace, mixed
+brackets and the X initializer format. Null and empty inputs return false; the
+all-zero GUID is syntactically valid. One Boolean is returned per pipeline input.
+This checks syntax only, not whether a directory object or resource exists.
+
+```powershell
+'00000000-0000-0000-0000-000000000000', 'invalid' | Test-IsGuid
+```
 
 Filename and path checks are lexical checks, not guarantees of existence, permissions
 or filesystem limits. Filename rules default to the host platform; use

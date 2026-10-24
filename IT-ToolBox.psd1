@@ -1,6 +1,6 @@
 @{
     RootModule = 'IT-ToolBox.psm1'
-    ModuleVersion = '3.0.1'
+    ModuleVersion = '3.1.0'
     GUID = '02c0c748-00ba-4e8f-b8ce-6aa7e4cefe08'
     Author = 'Daniele Catanesi - SingularVector'
     CompanyName = 'Community'
@@ -19,6 +19,7 @@
         'Test-FileName'
         'Test-IsValidPath'
         'Test-IsIP'
+        'Test-IsGuid'
         'Test-IsDate'
         'Test-IsEmail'
         'Test-IsUrl'
@@ -44,7 +45,7 @@
     AliasesToExport = @()
     PrivateData = @{
         PSData = @{
-            ReleaseNotes = '3.0.1: Fix macOS case-alias log locking and reject non-filesystem log destinations. Retains the 29-command API. See CHANGELOG.md.'
+            ReleaseNotes = '3.1.0: Add dependency-free Test-IsGuid syntax validation with pipeline support. Includes 3.0.1 logger fixes; exports 30 commands. See CHANGELOG.md.'
             Tags = @('Infrastructure', 'Automation', 'Logging')
             LicenseUri = 'https://github.com/SingularVector/IT-ToolBox/blob/master/LICENSE'
             ProjectUri = 'https://github.com/SingularVector/IT-ToolBox'

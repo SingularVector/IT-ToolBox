@@ -19,6 +19,7 @@ Export-ModuleMember -Function @(
     'Test-FileName'
     'Test-IsValidPath'
     'Test-IsIP'
+    'Test-IsGuid'
     'Test-IsDate'
     'Test-IsEmail'
     'Test-IsUrl'

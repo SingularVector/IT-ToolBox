@@ -1,5 +1,12 @@
 # IT-ToolBox - Change History
 
+## 3.1.0 - 2026-10-24
+
+- Add Test-IsGuid from PowerShell-Functions as a supported dependency-free validator, bringing the exported API to 30 commands.
+- Preserve N/D/B/P format acceptance, zero-GUID acceptance, whitespace rejection and one Boolean per pipeline record.
+- Update manifest, loader, README inventory and packaged-module regression expectations for 3.1.0.
+- Retain the logger fixes from 3.0.1; no new mandatory module dependencies.
+
 ## 3.0.1 - 2026-10-24
 
 - Share logger mutex identities for case-only path aliases on macOS, conservatively serializing distinct case-only names on case-sensitive Mac volumes.
