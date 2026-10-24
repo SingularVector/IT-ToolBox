@@ -4,13 +4,13 @@ BeforeAll {
     $package = & $buildScript -OutputDirectory (Join-Path $TestDrive 'output [literal]')
     $extractRoot = Join-Path $TestDrive 'extracted'
     [IO.Compression.ZipFile]::ExtractToDirectory($package.ArchivePath, $extractRoot)
-    $moduleRoot = Join-Path $extractRoot 'IT-ToolBox/3.1.0'
+    $moduleRoot = Join-Path $extractRoot 'IT-ToolBox/3.2.0'
 }
 
 Describe 'Installable module packaging' {
     It 'uses the manifest release version and conventional module layout' {
-        $package.Version | Should -Be '3.1.0'
-        [IO.Path]::GetFileName($package.ArchivePath) | Should -Be 'IT-ToolBox-3.1.0.zip'
+        $package.Version | Should -Be '3.2.0'
+        [IO.Path]::GetFileName($package.ArchivePath) | Should -Be 'IT-ToolBox-3.2.0.zip'
         Test-ModuleManifest (Join-Path $moduleRoot 'IT-ToolBox.psd1') -ErrorAction Stop | Should -Not -BeNullOrEmpty
         foreach ($name in @('LICENSE', 'CONTRIBUTING.md', 'SECURITY.md')) {
             Test-Path -LiteralPath (Join-Path $moduleRoot $name) | Should -BeTrue
@@ -45,7 +45,7 @@ Describe 'Installable module packaging' {
         $code = @"
 `$ErrorActionPreference = 'Stop'
 `$env:PSModulePath = '$escapedRoot' + [IO.Path]::PathSeparator + `$env:PSModulePath
-`$module = Import-Module IT-ToolBox -RequiredVersion 3.1.0 -Force -PassThru
+`$module = Import-Module IT-ToolBox -RequiredVersion 3.2.0 -Force -PassThru
 New-LogEntry -LogMessage 'Packaged logger' -BufferOnly
 [pscustomobject]@{
     ExportCount = `$module.ExportedFunctions.Count
@@ -59,7 +59,7 @@ New-LogEntry -LogMessage 'Packaged logger' -BufferOnly
         $LASTEXITCODE | Should -Be 0
         $result = $output | ConvertFrom-Json
         $result.ModuleBase | Should -Be $moduleRoot
-        $result.ExportCount | Should -Be 30
+        $result.ExportCount | Should -Be 31
         $result.Buffer.Count | Should -Be 1
         $result.Buffer[0] | Should -Match '\[INFO\]: Packaged logger$'
     }

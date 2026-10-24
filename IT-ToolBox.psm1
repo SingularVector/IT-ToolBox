@@ -26,6 +26,7 @@ Export-ModuleMember -Function @(
     'Convert-LogonTimestamp'
     'Get-OsUpTime'
     'Remove-SpecialCharacters'
+    'Test-IsRegistryKey'
     'Test-RegistryValue'
     'Test-IsValidDn'
     'Test-IsValidUpn'

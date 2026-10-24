@@ -6,11 +6,11 @@ BeforeAll {
 Describe 'IT-ToolBox module boundary' {
     It 'has a valid manifest' {
         $manifest = Test-ModuleManifest $manifestPath -ErrorAction Stop
-        $manifest.Version | Should -Be ([version]'3.1.0')
+        $manifest.Version | Should -Be ([version]'3.2.0')
     }
 
     It 'exports exactly the supported commands' {
-        $expected = @('New-LogEntry', 'New-Timer', 'Get-TimerStatus', 'Stop-Timer', 'Get-ElapsedTime', 'Get-ScriptDirectory', 'Get-ScriptName', 'Test-FileName', 'Test-IsValidPath', 'Test-IsIP', 'Test-IsGuid', 'Test-IsDate', 'Test-IsEmail', 'Test-IsUrl', 'Convert-LogonTimestamp', 'Get-OsUpTime', 'Remove-SpecialCharacters', 'Test-RegistryValue', 'Test-IsValidDn', 'Test-IsValidUpn', 'Get-ReportChain', 'New-StringEncryption', 'New-StringDecryption', 'New-RandomString', 'New-RandomPassword', 'New-PhoneticPassword', 'New-ApiRequest', 'New-StringConversion', 'Get-StringCheckSum', 'Get-StringHashCode') | Sort-Object
+        $expected = @('New-LogEntry', 'New-Timer', 'Get-TimerStatus', 'Stop-Timer', 'Get-ElapsedTime', 'Get-ScriptDirectory', 'Get-ScriptName', 'Test-FileName', 'Test-IsValidPath', 'Test-IsIP', 'Test-IsGuid', 'Test-IsDate', 'Test-IsEmail', 'Test-IsUrl', 'Convert-LogonTimestamp', 'Get-OsUpTime', 'Remove-SpecialCharacters', 'Test-IsRegistryKey', 'Test-RegistryValue', 'Test-IsValidDn', 'Test-IsValidUpn', 'Get-ReportChain', 'New-StringEncryption', 'New-StringDecryption', 'New-RandomString', 'New-RandomPassword', 'New-PhoneticPassword', 'New-ApiRequest', 'New-StringConversion', 'Get-StringCheckSum', 'Get-StringHashCode') | Sort-Object
         $actual = @($module.ExportedFunctions.Keys | Sort-Object)
         ($actual -join ',') | Should -Be ($expected -join ',')
         $module.ExportedVariables.Count | Should -Be 0
@@ -19,6 +19,7 @@ Describe 'IT-ToolBox module boundary' {
     }
 
     It 'keeps logging helpers private' {
+        Get-Command Open-ITToolBoxRegistryKey -Module IT-ToolBox -ErrorAction SilentlyContinue | Should -BeNullOrEmpty
         Get-Command Get-NewLogEntryMutexName -Module IT-ToolBox -ErrorAction SilentlyContinue | Should -BeNullOrEmpty
         Get-Command Test-ITToolBoxDnsName -Module IT-ToolBox -ErrorAction SilentlyContinue | Should -BeNullOrEmpty
         Get-Command Initialize-NewLogEntryState -Module IT-ToolBox -ErrorAction SilentlyContinue | Should -BeNullOrEmpty
