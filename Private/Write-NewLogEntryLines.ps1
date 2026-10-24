@@ -41,7 +41,7 @@ function Write-NewLogEntryLines
         if (-not $hasLock)
         {
             throw [System.TimeoutException]::new(
-                'Timed out waiting {0} seconds for the log file lock: {1}' -f $LockTimeoutSeconds, $resolvedPath
+                ('Timed out waiting {0} seconds for the log file lock: {1}' -f $LockTimeoutSeconds, $resolvedPath)
             )
         }
 

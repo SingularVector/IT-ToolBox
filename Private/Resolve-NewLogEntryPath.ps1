@@ -8,7 +8,16 @@ function Resolve-NewLogEntryPath
 
     if (-not [string]::IsNullOrWhiteSpace($Path))
     {
-        return $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($Path)
+        $provider = $null
+        $drive = $null
+        $resolved = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath(
+            $Path, [ref]$provider, [ref]$drive
+        )
+        if ($provider.Name -ne 'FileSystem')
+        {
+            throw [ArgumentException]::new('LogFilePath must use the FileSystem provider.')
+        }
+        return $resolved
     }
 
     $basePath = if (-not [string]::IsNullOrWhiteSpace($CallerScriptPath))
@@ -17,7 +26,12 @@ function Resolve-NewLogEntryPath
     }
     else
     {
-        Join-Path -Path (Get-Location).ProviderPath -ChildPath 'PowerShell'
+        $location = Get-Location
+        if ($location.Provider.Name -ne 'FileSystem')
+        {
+            throw [ArgumentException]::new('A filesystem LogFilePath is required when the current location uses another provider.')
+        }
+        Join-Path -Path $location.ProviderPath -ChildPath 'PowerShell'
     }
 
     $directory = Split-Path -Path $basePath -Parent

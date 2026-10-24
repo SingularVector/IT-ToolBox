@@ -5,7 +5,10 @@ function Get-NewLogEntryMutexName
         [string]$Path
     )
 
-    $normalizedPath = if ($IsWindows)
+    # Conservatively share locks for case aliases on macOS, including its
+    # common case-insensitive volumes. Case-sensitive macOS volumes may serialize
+    # distinct case-only filenames; that is safer than missing a shared file.
+    $normalizedPath = if ($IsWindows -or $IsMacOS)
     {
         $Path.ToUpperInvariant()
     }

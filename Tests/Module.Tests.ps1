@@ -6,7 +6,7 @@ BeforeAll {
 Describe 'IT-ToolBox module boundary' {
     It 'has a valid manifest' {
         $manifest = Test-ModuleManifest $manifestPath -ErrorAction Stop
-        $manifest.Version | Should -Be ([version]'3.0.0')
+        $manifest.Version | Should -Be ([version]'3.0.1')
     }
 
     It 'exports exactly the supported commands' {
