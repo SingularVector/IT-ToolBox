@@ -64,3 +64,29 @@ Describe 'Elapsed-time input validation' {
         Get-ElapsedTime -ElapsedTime $timer @selector | Should -Be $timer.Elapsed.$Component
     }
 }
+
+Describe 'Documented module surface' {
+    BeforeAll {
+        $root = Split-Path $manifestPath -Parent
+        $exports = @( (Import-PowerShellDataFile $manifestPath).FunctionsToExport | Sort-Object )
+    }
+    It 'documents exactly the manifest exports in the command inventory' {
+        $readme = Get-Content -LiteralPath (Join-Path $root 'README.md') -Raw
+        $inventory = [regex]::Match($readme, '(?s)<!-- command-inventory:start -->(.*?)<!-- command-inventory:end -->')
+        $inventory.Success | Should -BeTrue
+        $documented = @([regex]::Matches($inventory.Groups[1].Value, '(?m)^\| `([^`]+)` \|') | ForEach-Object { $_.Groups[1].Value } | Sort-Object)
+        $documented.Count | Should -Be $exports.Count
+        ($documented -join ',') | Should -Be ($exports -join ',')
+    }
+    It 'exports all top-level public functions without exposing additional commands' {
+        $publicFunctions = @(foreach ($file in Get-ChildItem (Join-Path $root 'Public') -Filter '*.ps1') {
+            $tokens = $null
+            $parseErrors = $null
+            $ast = [System.Management.Automation.Language.Parser]::ParseFile($file.FullName, [ref]$tokens, [ref]$parseErrors)
+            $parseErrors.Count | Should -Be 0
+            $ast.EndBlock.Statements | Where-Object { $_ -is [System.Management.Automation.Language.FunctionDefinitionAst] } | ForEach-Object Name
+        }) | Sort-Object
+        ($publicFunctions -join ',') | Should -Be ($exports -join ',')
+        (@($module.ExportedFunctions.Keys | Sort-Object) -join ',') | Should -Be ($exports -join ',')
+    }
+}
