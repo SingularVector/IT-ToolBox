@@ -67,7 +67,7 @@ finally {
         $result.ErrorPreference | Should -Be 'Continue'
         $result.WarningPreference | Should -Be 'Continue'
         $result.LocationPreserved | Should -BeTrue
-        $result.ExportCount | Should -Be 29
+        $result.ExportCount | Should -Be 30
         $result.HistoricalExports | Should -Be 0
     }
 }
