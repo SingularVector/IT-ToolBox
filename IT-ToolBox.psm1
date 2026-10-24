@@ -30,6 +30,8 @@ Export-ModuleMember -Function @(
     'Test-RegistryValue'
     'Test-IsValidDn'
     'Test-IsValidUpn'
+    'Test-UPNExist'
+    'Get-UniqueUPN'
     'Get-ReportChain'
     'New-StringEncryption'
     'New-StringDecryption'
