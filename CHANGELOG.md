@@ -1,5 +1,13 @@
 # IT-ToolBox - Change History
 
+## 3.0.1 - 2026-10-24
+
+- Share logger mutex identities for case-only path aliases on macOS, conservatively serializing distinct case-only names on case-sensitive Mac volumes.
+- Reject non-filesystem log destinations before file operations; retain buffered entries after a rejected flush.
+- Require an explicit filesystem destination for interactive default-path resolution from a non-filesystem location.
+- Correct timeout exception formatting so lock contention reports the intended TimeoutException.
+- Add provider-boundary and cross-process lock regression tests. Retain the 29-command API and PowerShell 7.4 baseline.
+
 ## 3.0.0 - 2026-10-24
 
 - Deliver the stable 29-command API on PowerShell 7.4+ (Core), with no mandatory external module dependencies at import.

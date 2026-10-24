@@ -1,6 +1,6 @@
 @{
     RootModule = 'IT-ToolBox.psm1'
-    ModuleVersion = '3.0.0'
+    ModuleVersion = '3.0.1'
     GUID = '02c0c748-00ba-4e8f-b8ce-6aa7e4cefe08'
     Author = 'Daniele Catanesi - SingularVector'
     CompanyName = 'Community'
@@ -44,7 +44,7 @@
     AliasesToExport = @()
     PrivateData = @{
         PSData = @{
-            ReleaseNotes = '3.0.0: Stable 29-command PowerShell 7.4+ API; aligned timer validation and diagnostics; updated SingularVector metadata and command documentation. See CHANGELOG.md for migration and validation boundaries.'
+            ReleaseNotes = '3.0.1: Fix macOS case-alias log locking and reject non-filesystem log destinations. Retains the 29-command API. See CHANGELOG.md.'
             Tags = @('Infrastructure', 'Automation', 'Logging')
             LicenseUri = 'https://github.com/SingularVector/IT-ToolBox/blob/master/LICENSE'
             ProjectUri = 'https://github.com/SingularVector/IT-ToolBox'

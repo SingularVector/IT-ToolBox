@@ -2,10 +2,10 @@
 
 [![PowerShell 7.4+](https://img.shields.io/badge/PowerShell-7.4%2B-5391FE?logo=powershell)](https://github.com/PowerShell/PowerShell)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)
-[![Version: 3.0.0](https://img.shields.io/badge/version-3.0.0-blue.svg)](./CHANGELOG.md)
+[![Version: 3.0.1](https://img.shields.io/badge/version-3.0.1-blue.svg)](./CHANGELOG.md)
 [![Testing wanted](https://img.shields.io/badge/testing-wanted-yellow.svg)](https://github.com/SingularVector/IT-ToolBox/issues/new/choose)
 
-> **Testing wanted — help validate IT-ToolBox 3.0.0 in real environments.**
+> **Testing wanted — help validate IT-ToolBox 3.0.1 in real environments.**
 > Feedback is especially useful for Windows AD report chains, remote CIM uptime,
 > API authentication and platform clipboard behavior.
 > [Report a bug](https://github.com/SingularVector/IT-ToolBox/issues/new/choose)
@@ -38,12 +38,12 @@ and remote CIM commands have the platform requirements listed below.
 
 ## Release status
 
-**IT-ToolBox 3.0.0** contains the 29-command API documented below, including the
+**IT-ToolBox 3.0.1** contains the 29-command API documented below, including the
 standalone timer alignment and updated module metadata. The manifest, loader,
 command inventory and installable archive use the same supported function set.
-See the [3.0.0 release notes](./CHANGELOG.md) for the changes and migration details.
+See the [3.0.1 release notes](./CHANGELOG.md) for the changes and migration details.
 
-Release builds should use the reviewed 3.0.0 commit or tag rather than a moving
+Release builds should use the reviewed 3.0.1 commit or tag rather than a moving
 master checkout. Build and installation instructions are in [Packaging](./docs/Packaging.md).
 
 ## Status and requirements
@@ -176,6 +176,22 @@ directory for interactive calls. Specify a path to select a stable log filename.
 `-RedactionText` is literal text, including dollar signs. Specify only one buffered
 severity switch, or use `-BufferOnly -Level WARNING` / `ERROR`.
 Redaction is opt-in and does not guarantee detection of every secret.
+
+
+### Logger path and lock boundaries
+
+Explicit log destinations must use the FileSystem provider. Non-filesystem paths
+such as `Env:NAME` are rejected before file operations. Interactive calls from a
+non-filesystem location require an explicit filesystem log destination; a calling
+script can still supply the default directory through its own filesystem path.
+A rejected flush preserves the buffer.
+
+On Windows and macOS, case-only path aliases share a mutex. On case-sensitive Mac
+volumes, distinct case-only filenames may therefore serialize unnecessarily.
+Locks remain path-based: symlink/hard-link aliases are not resolved to file identity.
+Upgrade all writers together: older macOS implementations can use different lock
+names for lowercase paths. Keep one consistent path spelling during mixed-version
+operation.
 
 ## Stopwatch helpers
 
