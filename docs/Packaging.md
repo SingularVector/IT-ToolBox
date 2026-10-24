@@ -1,7 +1,7 @@
 # Build and install the module
 
-Build from the reviewed 3.0.1 release commit or tag using PowerShell 7.4 or later.
-The manifest version is 3.0.1, with no prerelease suffix. Preserve that source
+Build from the reviewed 3.1.0 release commit or tag using PowerShell 7.4 or later.
+The manifest version is 3.1.0, with no prerelease suffix. Preserve that source
 revision alongside the archive when distributing it.
 
 Run from the repository root:
@@ -11,12 +11,12 @@ Invoke-Pester ./Tests
 ./scripts/Build-Module.ps1
 ```
 
-The script creates artifacts/IT-ToolBox-3.0.1.zip and returns its path,
+The script creates artifacts/IT-ToolBox-3.1.0.zip and returns its path,
 version and file count. It takes the version from the manifest without modifying
 it. Use -OutputDirectory to choose another local destination. An existing archive
 causes a terminating error; use a different destination for another build.
 
-The ZIP contains IT-ToolBox/3.0.1/ with the manifest, loader, Public and Private
+The ZIP contains IT-ToolBox/3.1.0/ with the manifest, loader, Public and Private
 implementation files, license, README, changelog, contributing guide, security policy and Markdown
 documents in docs/.
 Tests, build scripts, Legacy, Staging, Git metadata and external binaries are
@@ -26,8 +26,8 @@ in a separate session; the old decoder is not distributed in this archive.
 Extract into a new directory, then verify or import the extracted manifest:
 
 ```powershell
-Expand-Archive -LiteralPath './artifacts/IT-ToolBox-3.0.1.zip' -DestinationPath './module-install'
-Import-Module './module-install/IT-ToolBox/3.0.1/IT-ToolBox.psd1' -Force
+Expand-Archive -LiteralPath './artifacts/IT-ToolBox-3.1.0.zip' -DestinationPath './module-install'
+Import-Module './module-install/IT-ToolBox/3.1.0/IT-ToolBox.psd1' -Force
 Get-Command -Module IT-ToolBox
 ```
 
