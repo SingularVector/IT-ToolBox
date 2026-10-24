@@ -1,5 +1,12 @@
 # IT-ToolBox - Change History
 
+## 3.2.0 - 2026-10-24
+
+- Port Test-IsRegistryKey from PowerShell-Functions, bringing the supported API to 31 commands.
+- Share a private registry-key opener with Test-RegistryValue to preserve literal paths, missing-key handling and handle disposal.
+- Keep the standalone KeyPath parameter and Boolean contract; reject unsupported platforms and propagate provider/permission errors.
+- Update command inventory, release metadata and archive/import expectations; add offline and Windows registry regression tests.
+
 ## 3.1.0 - 2026-10-24
 
 - Add Test-IsGuid from PowerShell-Functions as a supported dependency-free validator, bringing the exported API to 30 commands.

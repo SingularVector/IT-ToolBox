@@ -30,27 +30,8 @@ function Test-RegistryValue
         [string]$Value
     )
 
-    if (-not $IsWindows)
-    {
-        throw [PlatformNotSupportedException]::new('Test-RegistryValue requires the Windows Registry provider.')
-    }
-
-    [System.Management.Automation.ProviderInfo]$provider = $null
-    [System.Management.Automation.PSDriveInfo]$drive = $null
-
-    # Resolve the path to confirm that the supplied path is actually using the Registry provider.
-    [void]$ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($Path, [ref]$provider, [ref]$drive)
-
-    if ($provider.Name -ne 'Registry')
-    {
-        throw 'Path must use the Registry provider.'
-    }
-
-    try
-    {
-        $key = Get-Item -LiteralPath $Path -ErrorAction Stop
-    }
-    catch [System.Management.Automation.ItemNotFoundException]
+    $key = Open-ITToolBoxRegistryKey -Path $Path
+    if ($null -eq $key)
     {
         return $false
     }

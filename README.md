@@ -2,10 +2,10 @@
 
 [![PowerShell 7.4+](https://img.shields.io/badge/PowerShell-7.4%2B-5391FE?logo=powershell)](https://github.com/PowerShell/PowerShell)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)
-[![Version: 3.1.0](https://img.shields.io/badge/version-3.1.0-blue.svg)](./CHANGELOG.md)
+[![Version: 3.2.0](https://img.shields.io/badge/version-3.2.0-blue.svg)](./CHANGELOG.md)
 [![Testing wanted](https://img.shields.io/badge/testing-wanted-yellow.svg)](https://github.com/SingularVector/IT-ToolBox/issues/new/choose)
 
-> **Testing wanted — help validate IT-ToolBox 3.1.0 in real environments.**
+> **Testing wanted — help validate IT-ToolBox 3.2.0 in real environments.**
 > Feedback is especially useful for Windows AD report chains, remote CIM uptime,
 > API authentication and platform clipboard behavior.
 > [Report a bug](https://github.com/SingularVector/IT-ToolBox/issues/new/choose)
@@ -38,17 +38,17 @@ and remote CIM commands have the platform requirements listed below.
 
 ## Release status
 
-**IT-ToolBox 3.1.0** contains the 30-command API documented below, including GUID
-syntax validation and the logger fixes from 3.0.1. The manifest, loader,
+**IT-ToolBox 3.2.0** contains the 31-command API documented below, including registry
+key existence checks, GUID syntax validation and the logger fixes from 3.0.1. The manifest, loader,
 command inventory and installable archive use the same supported function set.
-See the [3.1.0 release notes](./CHANGELOG.md) for the changes and migration details.
+See the [3.2.0 release notes](./CHANGELOG.md) for the changes and migration details.
 
-Release builds should use the reviewed 3.1.0 commit or tag rather than a moving
+Release builds should use the reviewed 3.2.0 commit or tag rather than a moving
 master checkout. Build and installation instructions are in [Packaging](./docs/Packaging.md).
 
 ## Status and requirements
 
-The module has **30 exported functions**, matching the manifest and loader.
+The module has **31 exported functions**, matching the manifest and loader.
 Automated tests cover the supported API; live AD, remote CIM and service
 authentication remain unverified.
 Requires PowerShell 7.4 or later (Core edition). Windows
@@ -56,7 +56,7 @@ PowerShell 5.1 is not supported.
 
 The module imports without WinSCP, GnuPG, Active Directory or Exchange
 dependencies. Most utilities run on Windows, Linux and macOS.
-`Test-RegistryValue` is Windows-only; remote `Get-OsUpTime` requires Windows CIM
+`Test-IsRegistryKey` and `Test-RegistryValue` are Windows-only; remote `Get-OsUpTime` requires Windows CIM
 cmdlets and a reachable Windows endpoint. `Get-ReportChain` requires an available
 `Get-ADUser` command and access to AD when invoked. Clipboard output requires a
 working platform clipboard backend.
@@ -139,6 +139,7 @@ parameter help and the sections below for compatibility details.
 | `Convert-LogonTimestamp` | Convert a supplied FILETIME; zero produces no date. |
 | `Get-OsUpTime` | Read local uptime or query Windows uptime through CIM. |
 | `Remove-SpecialCharacters` | Preview or rename filesystem items using the original punctuation policy. |
+| `Test-IsRegistryKey` | Check whether a literal registry key exists on Windows. |
 | `Test-RegistryValue` | Check a literal registry value name on Windows. |
 <!-- command-inventory:end -->
 
@@ -215,7 +216,7 @@ elapsed duration expressed in hours. These switches are mutually exclusive.
 - All commands formerly retained in `Staging/v3/` now have supported implementations.
   Its README records the migration. Exchange/AzureAD session wrappers and the global
   certificate-validation bypass have been removed; their source remains in Git history.
-- Only the thirty listed commands are exported. Private helpers, variables and aliases
+- Only the thirty-one listed commands are exported. Private helpers, variables and aliases
   are not exported. Do not treat v3 as a drop-in replacement for every v2 script:
   removed commands and documented parameter, output and encryption changes require
   migration. No restoration of removed service wrappers is promised.
@@ -480,6 +481,13 @@ directory being renamed are rejected before writes. Only affected-item records
 are logged; WhatIf suppresses logging.
 This replaces the staged implementation's silent default output, fixed C:\Temp
 logging and swallowed errors.
+
+`Test-IsRegistryKey -KeyPath 'HKCU:\Software\Example'` checks the key itself,
+even when it contains no values. It returns true for an existing key and false for
+a missing key. Wildcard characters are literal. Permission and provider errors
+terminate rather than being treated as absence. The command is Windows-only,
+uses the current process's registry view and does not inspect remote registries.
+The same behavior is available in the standalone PowerShell-Functions repository.
 
 `Test-RegistryValue -Path 'HKCU:\Software\Example' -Value 'Enabled'` is Windows-only.
 It checks literal value names, case-insensitively, and returns true for existing

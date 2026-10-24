@@ -1,6 +1,6 @@
 @{
     RootModule = 'IT-ToolBox.psm1'
-    ModuleVersion = '3.1.0'
+    ModuleVersion = '3.2.0'
     GUID = '02c0c748-00ba-4e8f-b8ce-6aa7e4cefe08'
     Author = 'Daniele Catanesi - SingularVector'
     CompanyName = 'Community'
@@ -26,6 +26,7 @@
         'Convert-LogonTimestamp'
         'Get-OsUpTime'
         'Remove-SpecialCharacters'
+        'Test-IsRegistryKey'
         'Test-RegistryValue'
         'Test-IsValidDn'
         'Test-IsValidUpn'
@@ -45,7 +46,7 @@
     AliasesToExport = @()
     PrivateData = @{
         PSData = @{
-            ReleaseNotes = '3.1.0: Add dependency-free Test-IsGuid syntax validation with pipeline support. Includes 3.0.1 logger fixes; exports 30 commands. See CHANGELOG.md.'
+            ReleaseNotes = '3.2.0: Add Windows-only Test-IsRegistryKey; share registry path validation and key access with Test-RegistryValue. Exports 31 commands with no new dependencies. See CHANGELOG.md.'
             Tags = @('Infrastructure', 'Automation', 'Logging')
             LicenseUri = 'https://github.com/SingularVector/IT-ToolBox/blob/master/LICENSE'
             ProjectUri = 'https://github.com/SingularVector/IT-ToolBox'
