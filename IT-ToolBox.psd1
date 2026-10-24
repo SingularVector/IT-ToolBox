@@ -1,6 +1,6 @@
 @{
     RootModule = 'IT-ToolBox.psm1'
-    ModuleVersion = '3.2.0'
+    ModuleVersion = '3.3.0'
     GUID = '02c0c748-00ba-4e8f-b8ce-6aa7e4cefe08'
     Author = 'Daniele Catanesi - SingularVector'
     CompanyName = 'Community'
@@ -30,6 +30,8 @@
         'Test-RegistryValue'
         'Test-IsValidDn'
         'Test-IsValidUpn'
+        'Test-UPNExist'
+        'Get-UniqueUPN'
         'Get-ReportChain'
         'New-StringEncryption'
         'New-StringDecryption'
@@ -46,7 +48,7 @@
     AliasesToExport = @()
     PrivateData = @{
         PSData = @{
-            ReleaseNotes = '3.2.0: Add Windows-only Test-IsRegistryKey; share registry path validation and key access with Test-RegistryValue. Exports 31 commands with no new dependencies. See CHANGELOG.md.'
+            ReleaseNotes = '3.3.0: Add Get-UniqueUPN and Test-UPNExist with explicit AD search scope and consistent UPN naming policy. Exports 33 commands; ActiveDirectory remains optional at import. See CHANGELOG.md.'
             Tags = @('Infrastructure', 'Automation', 'Logging')
             LicenseUri = 'https://github.com/SingularVector/IT-ToolBox/blob/master/LICENSE'
             ProjectUri = 'https://github.com/SingularVector/IT-ToolBox'

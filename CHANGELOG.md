@@ -1,5 +1,13 @@
 # IT-ToolBox - Change History
 
+## 3.3.0 - 2026-10-24
+
+- Port Get-UniqueUPN and Test-UPNExist, bringing the supported API to 33 commands while keeping AD dependencies optional at import.
+- Validate generated candidates against Test-IsValidUpn before directory lookup; reject unsupported names and separators without silent transliteration.
+- Preserve explicit forest/Global Catalog and domain coverage, escaped LDAP equality filters, bounded collision attempts and propagated query failures.
+- Handle an absent optional ADUser middle-name property under StrictMode and validate explicit server ports within 1–65535.
+- Add offline query-construction and policy tests; document live AD validation boundaries and the preflight-only uniqueness guarantee.
+
 ## 3.2.0 - 2026-10-24
 
 - Port Test-IsRegistryKey from PowerShell-Functions, bringing the supported API to 31 commands.

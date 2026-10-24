@@ -2,10 +2,10 @@
 
 [![PowerShell 7.4+](https://img.shields.io/badge/PowerShell-7.4%2B-5391FE?logo=powershell)](https://github.com/PowerShell/PowerShell)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)
-[![Version: 3.2.0](https://img.shields.io/badge/version-3.2.0-blue.svg)](./CHANGELOG.md)
+[![Version: 3.3.0](https://img.shields.io/badge/version-3.3.0-blue.svg)](./CHANGELOG.md)
 [![Testing wanted](https://img.shields.io/badge/testing-wanted-yellow.svg)](https://github.com/SingularVector/IT-ToolBox/issues/new/choose)
 
-> **Testing wanted — help validate IT-ToolBox 3.2.0 in real environments.**
+> **Testing wanted — help validate IT-ToolBox 3.3.0 in real environments.**
 > Feedback is especially useful for Windows AD report chains, remote CIM uptime,
 > API authentication and platform clipboard behavior.
 > [Report a bug](https://github.com/SingularVector/IT-ToolBox/issues/new/choose)
@@ -24,7 +24,7 @@ and remote CIM commands have the platform requirements listed below.
 | --- | --- |
 | Logging and operations | `New-LogEntry`, `New-Timer`, `Get-ElapsedTime`, `Stop-Timer` |
 | Validation | `Test-IsEmail`, `Test-IsUrl`, `Test-IsValidDn`, `Test-IsValidUpn` |
-| Identity and AD helpers | `Get-ReportChain`, `Convert-LogonTimestamp`, `Test-IsValidUpn` |
+| Identity and AD helpers | `Get-UniqueUPN`, `Test-UPNExist`, `Get-ReportChain`, `Convert-LogonTimestamp` |
 | String handling and passwords | `New-StringEncryption`, `New-StringDecryption`, `New-PhoneticPassword`, `Get-StringHashCode` |
 | OS and filesystem | `Get-OsUpTime`, `Remove-SpecialCharacters`, `Test-RegistryValue` |
 
@@ -38,17 +38,17 @@ and remote CIM commands have the platform requirements listed below.
 
 ## Release status
 
-**IT-ToolBox 3.2.0** contains the 31-command API documented below, including registry
-key existence checks, GUID syntax validation and the logger fixes from 3.0.1. The manifest, loader,
+**IT-ToolBox 3.3.0** contains the 33-command API documented below, including UPN
+generation and availability checks alongside registry and GUID validation. The manifest, loader,
 command inventory and installable archive use the same supported function set.
-See the [3.2.0 release notes](./CHANGELOG.md) for the changes and migration details.
+See the [3.3.0 release notes](./CHANGELOG.md) for the changes and migration details.
 
-Release builds should use the reviewed 3.2.0 commit or tag rather than a moving
+Release builds should use the reviewed 3.3.0 commit or tag rather than a moving
 master checkout. Build and installation instructions are in [Packaging](./docs/Packaging.md).
 
 ## Status and requirements
 
-The module has **31 exported functions**, matching the manifest and loader.
+The module has **33 exported functions**, matching the manifest and loader.
 Automated tests cover the supported API; live AD, remote CIM and service
 authentication remain unverified.
 Requires PowerShell 7.4 or later (Core edition). Windows
@@ -58,7 +58,10 @@ The module imports without WinSCP, GnuPG, Active Directory or Exchange
 dependencies. Most utilities run on Windows, Linux and macOS.
 `Test-IsRegistryKey` and `Test-RegistryValue` are Windows-only; remote `Get-OsUpTime` requires Windows CIM
 cmdlets and a reachable Windows endpoint. `Get-ReportChain` requires an available
-`Get-ADUser` command and access to AD when invoked. Clipboard output requires a
+`Get-ADUser` command and access to AD when invoked. `Test-UPNExist` and
+`Get-UniqueUPN` also require AD commands at invocation; forest discovery uses
+`Get-ADDomainController`, while domain lookup uses `Get-ADRootDSE`.
+These dependencies do not prevent module import on macOS/Linux. Clipboard output requires a
 working platform clipboard backend.
 
 ## Quick start from a clone
@@ -126,6 +129,8 @@ parameter help and the sections below for compatibility details.
 | `Test-IsUrl` | Check supported absolute URL syntax; does not fetch the URL. |
 | `Test-IsValidDn` | Check the documented practical DN syntax subset. |
 | `Test-IsValidUpn` | Check username and DNS/IDN suffix syntax; no directory lookup. |
+| `Test-UPNExist` | Check an existing UPN in the selected forest or domain; requires AD commands. |
+| `Get-UniqueUPN` | Find an available policy-valid UPN with bounded collision checks; requires AD commands. |
 | `Get-ReportChain` | Query transitive reports in AD; requires Get-ADUser and AD access. |
 | `New-StringEncryption` | Encrypt strings using the authenticated ITTB1 format and a passphrase. |
 | `New-StringDecryption` | Decrypt and authenticate ITTB1 ciphertext with a passphrase. |
@@ -216,7 +221,7 @@ elapsed duration expressed in hours. These switches are mutually exclusive.
 - All commands formerly retained in `Staging/v3/` now have supported implementations.
   Its README records the migration. Exchange/AzureAD session wrappers and the global
   certificate-validation bypass have been removed; their source remains in Git history.
-- Only the thirty-one listed commands are exported. Private helpers, variables and aliases
+- Only the thirty-three listed commands are exported. Private helpers, variables and aliases
   are not exported. Do not treat v3 as a drop-in replacement for every v2 script:
   removed commands and documented parameter, output and encryption changes require
   migration. No restoration of removed service wrappers is promised.
@@ -544,6 +549,26 @@ No ActiveDirectory dependency is required to import IT-ToolBox or use the naming
 validators. Get-ReportChain requires an available Get-ADUser command and access to
 an AD endpoint when invoked; it uses the command's ambient authentication. Tests
 mock AD queries and verify filter construction; no live domain query is tested.
+
+### UPN generation and availability
+
+`Get-UniqueUPN` constructs a name and checks candidates through `Test-UPNExist`.
+Both functions are available without an AD dependency at module import, but actual
+availability checks require the ActiveDirectory commands and directory connectivity.
+`Test-IsValidUpn` remains a local, cross-platform syntax check.
+
+```powershell
+Test-IsValidUpn 'jose.garcia@example.com'
+Get-UniqueUPN -FirstName Jose -LastName Garcia -UPNSuffix example.com -ADServer gc.example.com
+Test-UPNExist -UPN 'jose.garcia@example.com' -SearchScope Domain -AdServer dc.example.com
+```
+
+Generation follows the same ASCII username policy as the validator. Unsupported
+names or separators fail before any directory query; no automatic accent stripping
+or transliteration is applied. IDN suffixes remain supported. Forest scope is the
+default and uses a Global Catalog; domain scope is explicitly narrower. An
+available name is a preflight result, not an atomic reservation. See
+[UPN naming, scope and migration](./docs/UPN.md) for requirements and examples.
 
 ## Script context
 
