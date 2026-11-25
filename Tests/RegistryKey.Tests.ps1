@@ -53,22 +53,42 @@ Describe 'Registry key platform boundary' {
     It 'rejects invocation on non-Windows without affecting module import' -Skip:$IsWindows {
         { Test-IsRegistryKey 'HKCU:\Software' } | Should -Throw '*Windows Registry provider*'
     }
-    It 'checks actual literal empty HKCU keys on Windows' -Skip:(-not $IsWindows) {
-        $parent = 'HKCU:\Software\ITToolBoxKeyTests-' + [guid]::NewGuid().ToString('N')
-        try {
-            $null = New-Item -Path $parent -ErrorAction Stop
-            $key = Get-Item -LiteralPath $parent -ErrorAction Stop
-            try { $child = $key.CreateSubKey('Literal[1]') }
-            finally { $key.Dispose() }
-            $child.Dispose()
-            Test-IsRegistryKey ($parent + '\Literal[1]') | Should -BeTrue
-            Test-IsRegistryKey ($parent + '\Literal*') | Should -BeFalse
-            Test-IsRegistryKey ($parent + '\Missing') | Should -BeFalse
-            Test-RegistryValue ($parent + '\Literal[1]') 'Missing' | Should -BeFalse
-            { Test-IsRegistryKey $TestDrive } | Should -Throw '*Registry provider*'
+    It 'checks actual literal empty HKCU keys on Windows' -Skip:(-not $IsWindows) -Test (
+        {
+            $registryPath = 'Software\ITToolBoxKeyTests-' + [guid]::NewGuid().ToString('N')
+            $parent = 'HKCU:\' + $registryPath
+
+            try
+            {
+                $null = New-Item -Path $parent -ErrorAction Stop
+
+                # Get-Item returns a read-only handle. Request write access explicitly
+                # so the fixture can create the literal child key before testing reads.
+                $key = [Microsoft.Win32.Registry]::CurrentUser.OpenSubKey($registryPath, $true)
+
+                try
+                {
+                    $child = $key.CreateSubKey('Literal[1]')
+                    $child.Dispose()
+                }
+                finally
+                {
+                    $key.Dispose()
+                }
+
+                Test-IsRegistryKey ($parent + '\Literal[1]') | Should -BeTrue
+                Test-IsRegistryKey ($parent + '\Literal*') | Should -BeFalse
+                Test-IsRegistryKey ($parent + '\Missing') | Should -BeFalse
+                Test-RegistryValue ($parent + '\Literal[1]') 'Missing' | Should -BeFalse
+                { Test-IsRegistryKey $TestDrive } | Should -Throw '*Registry provider*'
+            }
+            finally
+            {
+                if (Test-Path -LiteralPath $parent)
+                {
+                    Remove-Item -LiteralPath $parent -Recurse -Force
+                }
+            }
         }
-        finally {
-            if (Test-Path -LiteralPath $parent) { Remove-Item -LiteralPath $parent -Recurse -Force }
-        }
-    }
+    )
 }

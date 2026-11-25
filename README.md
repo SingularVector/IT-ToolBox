@@ -1,22 +1,36 @@
 # IT-ToolBox
 
+[![CI](https://github.com/SingularVector/IT-ToolBox/actions/workflows/powershell.yml/badge.svg)](https://github.com/SingularVector/IT-ToolBox/actions/workflows/powershell.yml)
 [![PowerShell 7.4+](https://img.shields.io/badge/PowerShell-7.4%2B-5391FE?logo=powershell)](https://github.com/PowerShell/PowerShell)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)
 [![Version: 3.3.0](https://img.shields.io/badge/version-3.3.0-blue.svg)](./CHANGELOG.md)
 [![Testing wanted](https://img.shields.io/badge/testing-wanted-yellow.svg)](https://github.com/SingularVector/IT-ToolBox/issues/new/choose)
 
-> **Testing wanted — help validate IT-ToolBox 3.3.0 in real environments.**
-> Feedback is especially useful for Windows AD report chains, remote CIM uptime,
-> API authentication and platform clipboard behavior.
-> [Report a bug](https://github.com/SingularVector/IT-ToolBox/issues/new/choose)
-> with the command, expected/actual result, OS, PowerShell version and commit or
-> module version. Redact credentials and private data; report vulnerabilities
-> through [the private security reporting route](./SECURITY.md).
-
 IT-ToolBox collects PowerShell utilities used in systems engineering and infrastructure
 automation: logging, input validation, timing, string handling, password generation
 and API requests. Most commands run on Windows, Linux and macOS; the AD, registry
 and remote CIM commands have the platform requirements listed below.
+
+## Try a small operation
+
+From a clone, start PowerShell 7.4 or later in the repository root:
+
+```powershell
+Import-Module ./IT-ToolBox.psd1 -ErrorAction Stop
+
+# Validate input, then collect a log entry without creating a file.
+Test-IsEmail 'person@example.com'
+New-LogEntry -LogMessage 'Daily report started' -BufferOnly
+New-LogEntry -GetBuffer
+New-LogEntry -ClearBuffer
+```
+
+The validation returns `True`; the buffer contains one timestamped `INFO` entry.
+The final command clears the example entry.
+
+| Version | Platforms | Verification |
+| --- | --- | --- |
+| 3.3.0; PowerShell 7.4+ | Shared utilities: Windows, Linux and macOS; registry and AD helpers have additional requirements | [CI results](https://github.com/SingularVector/IT-ToolBox/actions/workflows/powershell.yml); live integration limits below |
 
 ## At a glance
 
@@ -41,7 +55,7 @@ and remote CIM commands have the platform requirements listed below.
 **IT-ToolBox 3.3.0** contains the 33-command API documented below, including UPN
 generation and availability checks alongside registry and GUID validation. The manifest, loader,
 command inventory and installable archive use the same supported function set.
-See the [3.3.0 release notes](./CHANGELOG.md) for the changes and migration details.
+See the [3.3.0 release](https://github.com/SingularVector/IT-ToolBox/releases/tag/v3.3.0) and [changelog](./CHANGELOG.md) for the changes and migration details.
 
 Release builds should use the reviewed 3.3.0 commit or tag rather than a moving
 master checkout. Build and installation instructions are in [Packaging](./docs/Packaging.md).
@@ -228,6 +242,14 @@ elapsed duration expressed in hours. These switches are mutually exclusive.
 - The module GUID and Git history are preserved.
 
 ## Tests and CI
+
+> **Testing wanted — help validate IT-ToolBox 3.3.0 in real environments.**
+> Feedback is especially useful for Windows AD report chains, remote CIM uptime,
+> API authentication and platform clipboard behavior.
+> [Report a bug](https://github.com/SingularVector/IT-ToolBox/issues/new/choose)
+> with the command, expected/actual result, OS, PowerShell version and commit or
+> module version. Redact credentials and private data; report vulnerabilities
+> through [the private security reporting route](./SECURITY.md).
 
 For a clean installable module archive, run `./scripts/Build-Module.ps1` in
 PowerShell after running the tests. The archive includes supported module code
